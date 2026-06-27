@@ -22,7 +22,10 @@ app.use(requestLogger);
 // Secure headers
 app.use(helmet({
   contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: {
+    policy: 'cross-origin'
+  }
 }));
 
 // Rate Limiter
