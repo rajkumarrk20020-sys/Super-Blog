@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import api from '../api';
 import BlogCard from '../components/BlogCard';
+import getImageUrl from '../utils/getImageUrl';
 
 const BlogList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -233,7 +234,7 @@ const BlogList = () => {
                   <div className="row g-0 align-items-stretch">
                     <div className="col-lg-6 position-relative featured-image-panel overflow-hidden">
                       {featuredBlog.featuredImage ? (
-                        <img src={featuredBlog.featuredImage} alt={featuredBlog.title} className="w-100 h-100 object-cover" loading="lazy" />
+                        <img src={getImageUrl(featuredBlog.featuredImage)} alt={featuredBlog.title} className="w-100 h-100 object-cover" loading="lazy" />
                       ) : (
                         <div className="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white">
                           <i className="bi bi-image fs-1"></i>
@@ -250,7 +251,7 @@ const BlogList = () => {
                       <div>
                         <div className="d-flex align-items-center gap-3 mb-4">
                           {featuredBlog.author?.profileImage ? (
-                            <img src={featuredBlog.author.profileImage} alt={featuredBlog.author.name} className="rounded-circle" style={{ width: '48px', height: '48px', objectFit: 'cover' }} loading="lazy" />
+                            <img src={getImageUrl(featuredBlog.author.profileImage)} alt={featuredBlog.author.name} className="rounded-circle" style={{ width: '48px', height: '48px', objectFit: 'cover' }} loading="lazy" />
                           ) : (
                             <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '48px', height: '48px', fontSize: '18px' }}>
                               {featuredBlog.author?.name?.charAt(0).toUpperCase() || 'A'}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import getImageUrl from '../utils/getImageUrl';
 
 const BlogCard = ({ blog }) => {
   const stripHtml = (html) => {
@@ -24,7 +25,7 @@ const BlogCard = ({ blog }) => {
       <div className="card-media position-relative overflow-hidden" style={{ minHeight: '240px' }}>
         {blog.featuredImage ? (
           <img
-            src={blog.featuredImage}
+            src={getImageUrl(blog.featuredImage)}
             className="w-100 h-100 card-media-img"
             alt={blog.title}
             style={{ objectFit: 'cover' }}
@@ -51,7 +52,7 @@ const BlogCard = ({ blog }) => {
             <div className="d-flex align-items-center gap-2">
               {blog.author?.profileImage ? (
                 <img
-                  src={blog.author.profileImage}
+                  src={getImageUrl(blog.author.profileImage)}
                   alt={blog.author.name}
                   className="rounded-circle"
                   style={{ width: '36px', height: '36px', objectFit: 'cover' }}

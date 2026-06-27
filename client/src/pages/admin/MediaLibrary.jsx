@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
+import getImageUrl from '../../utils/getImageUrl';
 
 const MediaLibrary = () => {
   const { token, showToast, user } = useContext(AuthContext);
@@ -192,7 +193,7 @@ const MediaLibrary = () => {
   };
 
   const copyToClipboard = (filename) => {
-    const fullUrl = `${window.location.origin}/uploads/${filename}`;
+    const fullUrl = getImageUrl(filename);
     navigator.clipboard.writeText(fullUrl)
       .then(() => showToast('Image URL copied to clipboard!', 'success'))
       .catch(() => showToast('Failed to copy URL.', 'danger'));
@@ -415,7 +416,7 @@ const MediaLibrary = () => {
                             onClick={() => setPreviewItem(item)}
                           >
                             <img
-                              src={`/uploads/${item.filename}`}
+                              src={getImageUrl(item.filename)}
                               alt={item.originalName}
                               className="img-fluid w-100 h-100 object-fit-cover transition-transform"
                             />
@@ -502,7 +503,7 @@ const MediaLibrary = () => {
                                   onClick={() => setPreviewItem(item)}
                                 >
                                   <img
-                                    src={`/uploads/${item.filename}`}
+                                    src={getImageUrl(item.filename)}
                                     alt={item.originalName}
                                     className="w-100 h-100 object-fit-cover"
                                   />
@@ -619,7 +620,7 @@ const MediaLibrary = () => {
               </div>
               <div className="modal-body p-0 bg-light d-flex align-items-center justify-content-center" style={{ minHeight: '300px', maxHeight: '500px', overflow: 'hidden' }}>
                 <img
-                  src={`/uploads/${previewItem.filename}`}
+                  src={getImageUrl(previewItem.filename)}
                   alt={previewItem.originalName}
                   className="img-fluid object-fit-contain"
                   style={{ maxHeight: '480px' }}
@@ -642,7 +643,7 @@ const MediaLibrary = () => {
                     Copy URL
                   </button>
                   <a
-                    href={`/uploads/${previewItem.filename}`}
+                    href={getImageUrl(previewItem.filename)}
                     download={previewItem.originalName}
                     className="btn btn-primary rounded-3 btn-sm px-3"
                     target="_blank"

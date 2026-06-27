@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api';
 import CommentSection from '../components/CommentSection';
+import getImageUrl from '../utils/getImageUrl';
 
 const BlogDetail = () => {
   const { slug } = useParams();
@@ -107,7 +108,7 @@ const BlogDetail = () => {
           <section className="article-hero rounded-4 overflow-hidden shadow-sm mb-5">
             {blog.featuredImage && (
               <div className="hero-image position-relative overflow-hidden" style={{ minHeight: '420px' }}>
-                <img src={blog.featuredImage} alt={blog.title} className="w-100 h-100 object-cover" loading="lazy" />
+                <img src={getImageUrl(blog.featuredImage)} alt={blog.title} className="w-100 h-100 object-cover" loading="lazy" />
                 <span className="article-category-pill position-absolute top-0 start-0 m-4">{blog.category?.name}</span>
               </div>
             )}
@@ -117,7 +118,7 @@ const BlogDetail = () => {
               <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 text-secondary mb-4">
                 <div className="d-flex align-items-center gap-3">
                   {blog.author?.profileImage ? (
-                    <img src={blog.author.profileImage} alt={blog.author.name} className="rounded-circle" style={{ width: '52px', height: '52px', objectFit: 'cover' }} loading="lazy" />
+                    <img src={getImageUrl(blog.author.profileImage)} alt={blog.author.name} className="rounded-circle" style={{ width: '52px', height: '52px', objectFit: 'cover' }} loading="lazy" />
                   ) : (
                     <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '52px', height: '52px', fontSize: '18px' }}>
                       {blog.author?.name?.charAt(0).toUpperCase() || 'A'}
@@ -164,7 +165,7 @@ const BlogDetail = () => {
                 <div className="author-card rounded-4 bg-offwhite border p-4 mt-5">
                   <div className="d-flex align-items-center gap-3">
                     {blog.author?.profileImage ? (
-                      <img src={blog.author.profileImage} alt={blog.author.name} className="rounded-circle" style={{ width: '64px', height: '64px', objectFit: 'cover' }} loading="lazy" />
+                      <img src={getImageUrl(blog.author.profileImage)} alt={blog.author.name} className="rounded-circle" style={{ width: '64px', height: '64px', objectFit: 'cover' }} loading="lazy" />
                     ) : (
                       <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '64px', height: '64px', fontSize: '22px' }}>
                         {blog.author?.name?.charAt(0).toUpperCase() || 'A'}
@@ -198,7 +199,7 @@ const BlogDetail = () => {
                     <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
                       <div className="ratio ratio-16x9">
                         {item.featuredImage ? (
-                          <img src={item.featuredImage} alt={item.title} className="w-100 h-100 object-cover" />
+                          <img src={getImageUrl(item.featuredImage)} alt={item.title} className="w-100 h-100 object-cover" />
                         ) : (
                           <div className="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white">
                             <i className="bi bi-image fs-4"></i>

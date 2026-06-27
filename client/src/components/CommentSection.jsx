@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
 import { AuthContext } from '../context/AuthContext';
+import getImageUrl from '../utils/getImageUrl';
 
 const CommentSection = ({ blogId }) => {
   const { user, token, showToast } = useContext(AuthContext);
@@ -184,7 +185,7 @@ const CommentSection = ({ blogId }) => {
         {/* Commenter profile pic */}
         {comment.userId?.profileImage ? (
           <img
-            src={comment.userId.profileImage}
+            src={getImageUrl(comment.userId.profileImage)}
             alt={comment.userId.name}
             className="rounded-circle mt-1 flex-shrink-0"
             style={{ width: isReply ? '32px' : '44px', height: isReply ? '32px' : '44px', objectFit: 'cover' }}

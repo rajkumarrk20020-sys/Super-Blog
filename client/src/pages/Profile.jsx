@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import getImageUrl from '../utils/getImageUrl';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -18,7 +19,7 @@ const Profile = () => {
             <div className="mb-4">
               {user.profileImage ? (
                 <img
-                  src={user.profileImage}
+                  src={getImageUrl(user.profileImage)}
                   alt={user.name}
                   className="rounded-circle border border-4 border-primary shadow-sm"
                   style={{ width: '150px', height: '150px', objectFit: 'cover' }}

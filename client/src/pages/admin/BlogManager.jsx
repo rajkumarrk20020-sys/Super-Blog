@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
+import getImageUrl from '../../utils/getImageUrl';
 
 const BlogManager = () => {
   const { user, token, showToast } = useContext(AuthContext);
@@ -162,7 +163,7 @@ const BlogManager = () => {
                           <td>
                             {blog.featuredImage ? (
                               <img
-                                src={blog.featuredImage}
+                                src={getImageUrl(blog.featuredImage)}
                                 alt={blog.title}
                                 className="rounded shadow-sm"
                                 style={{ width: '60px', height: '40px', objectFit: 'cover' }}

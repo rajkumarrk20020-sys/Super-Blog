@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api';
 import BlogCard from '../components/BlogCard';
+import getImageUrl from '../utils/getImageUrl';
 
 const AuthorProfile = () => {
   const { id } = useParams();
@@ -64,7 +65,7 @@ const AuthorProfile = () => {
             <div className="col-md-3 text-center text-md-start">
               {authorInfo?.profileImage ? (
                 <img
-                  src={authorInfo.profileImage}
+                  src={getImageUrl(authorInfo.profileImage)}
                   alt={authorInfo.name}
                   className="rounded-circle border border-4 border-white shadow-lg"
                   style={{ width: '150px', height: '150px', objectFit: 'cover' }}
@@ -125,7 +126,7 @@ const AuthorProfile = () => {
                 <div className="author-article-card rounded-4 bg-white shadow-sm overflow-hidden d-flex flex-column flex-md-row gap-4">
                   <div className="author-article-image flex-shrink-0 overflow-hidden rounded-4" style={{ minWidth: '220px', minHeight: '180px' }}>
                     {blog.featuredImage ? (
-                      <img src={blog.featuredImage} alt={blog.title} className="w-100 h-100 object-cover" loading="lazy" />
+                      <img src={getImageUrl(blog.featuredImage)} alt={blog.title} className="w-100 h-100 object-cover" loading="lazy" />
                     ) : (
                       <div className="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white">
                         <i className="bi bi-image fs-2"></i>

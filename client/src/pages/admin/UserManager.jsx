@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
+import getImageUrl from '../../utils/getImageUrl';
 
 const UserManager = () => {
   const { token, showToast, user } = useContext(AuthContext);
@@ -151,7 +152,7 @@ const UserManager = () => {
                           <td>
                             {item.profileImage ? (
                               <img
-                                src={item.profileImage}
+                                src={getImageUrl(item.profileImage)}
                                 alt={item.name}
                                 className="rounded-circle"
                                 style={{ width: '40px', height: '40px', objectFit: 'cover' }}

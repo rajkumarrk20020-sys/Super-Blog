@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import api from '../api';
+import getImageUrl from '../utils/getImageUrl';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -149,7 +150,7 @@ const Navbar = () => {
                 >
                   {user.profileImage ? (
                     <img
-                      src={user.profileImage}
+                      src={getImageUrl(user.profileImage)}
                       alt={user.name}
                       className="rounded-circle border border-2 border-primary"
                       style={{ width: '36px', height: '36px', objectFit: 'cover' }}

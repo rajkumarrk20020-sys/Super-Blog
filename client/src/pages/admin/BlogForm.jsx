@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 import RichTextEditor from '../../components/RichTextEditor';
+import getImageUrl from '../../utils/getImageUrl';
 
 const BlogForm = () => {
   const { id } = useParams();
@@ -371,7 +372,7 @@ const BlogForm = () => {
                       {existingImage && (
                         <div className="mb-2 position-relative rounded overflow-hidden shadow-sm" style={{ height: '150px' }}>
                           <img
-                            src={existingImage}
+                            src={getImageUrl(existingImage)}
                             alt="Existing featured image"
                             className="w-100 h-100"
                             style={{ objectFit: 'cover' }}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import getImageUrl from '../utils/getImageUrl';
 
 const FeaturedBlog = ({ blog }) => {
   if (!blog) return null;
@@ -27,7 +28,7 @@ const FeaturedBlog = ({ blog }) => {
         <div className="col-lg-6" style={{ minHeight: '350px' }}>
           {blog.featuredImage ? (
             <img
-              src={blog.featuredImage}
+              src={getImageUrl(blog.featuredImage)}
               alt={blog.title}
               className="w-100 h-100"
               style={{ objectFit: 'cover' }}
@@ -57,7 +58,7 @@ const FeaturedBlog = ({ blog }) => {
             <div className="d-flex align-items-center gap-3">
               {blog.author?.profileImage ? (
                 <img
-                  src={blog.author.profileImage}
+                  src={getImageUrl(blog.author.profileImage)}
                   alt={blog.author.name}
                   className="rounded-circle"
                   style={{ width: '48px', height: '48px', objectFit: 'cover' }}
