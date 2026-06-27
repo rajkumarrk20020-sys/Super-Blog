@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 
 const CommentModerator = () => {
@@ -20,7 +20,7 @@ const CommentModerator = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get('/api/blogs?limit=100');
+      const res = await api.get('/blogs?limit=100');
       if (res.data.success) {
         setBlogs(res.data.data);
       }
@@ -32,8 +32,8 @@ const CommentModerator = () => {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        `/api/comments?page=${page}&limit=10&search=${encodeURIComponent(search)}&status=${status}&blogId=${blogId}&sortBy=${sortBy}`,
+      const res = await api.get(
+        `/comments?page=${page}&limit=10&search=${encodeURIComponent(search)}&status=${status}&blogId=${blogId}&sortBy=${sortBy}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.data.success) {
@@ -69,8 +69,8 @@ const CommentModerator = () => {
 
   const handleModerate = async (id, newStatus) => {
     try {
-      const res = await axios.put(
-        `/api/comments/${id}/moderate`,
+      const res = await api.put(
+        `/comments/${id}/moderate`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -90,7 +90,7 @@ const CommentModerator = () => {
     if (!window.confirm('Are you sure you want to soft delete this comment? It will be hidden from the website.')) return;
 
     try {
-      const res = await axios.delete(`/api/comments/${id}/soft`, {
+      const res = await api.delete(`/comments/${id}/soft`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data.success) {
@@ -107,8 +107,8 @@ const CommentModerator = () => {
 
   const handleRestore = async (id) => {
     try {
-      const res = await axios.put(
-        `/api/comments/${id}/restore`,
+      const res = await api.put(
+        `/comments/${id}/restore`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -126,8 +126,8 @@ const CommentModerator = () => {
 
   const handlePin = async (id) => {
     try {
-      const res = await axios.put(
-        `/api/comments/${id}/pin`,
+      const res = await api.put(
+        `/comments/${id}/pin`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -157,7 +157,7 @@ const CommentModerator = () => {
     if (!window.confirm('WARNING: Are you sure you want to permanently hard delete this comment from the database? This action is irreversible.')) return;
 
     try {
-      const res = await axios.delete(`/api/comments/${id}`, {
+      const res = await api.delete(`/comments/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data.success) {

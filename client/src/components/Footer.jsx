@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 
 const Footer = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     let mounted = true;
-    axios.get('/api/categories').then(res => {
+    api.get('/categories').then(res => {
       if (!mounted) return;
       if (res.data?.success) setCategories(res.data.data || []);
     }).catch(() => {});

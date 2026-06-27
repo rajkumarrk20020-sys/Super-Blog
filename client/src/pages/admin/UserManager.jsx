@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 
 const UserManager = () => {
@@ -11,7 +11,7 @@ const UserManager = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/auth/users', {
+      const res = await api.get('/auth/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data.success) {
@@ -33,8 +33,8 @@ const UserManager = () => {
 
   const handleRoleChange = async (userId, newRole) => {
     try {
-      const res = await axios.put(
-        `/api/auth/users/${userId}/role`,
+      const res = await api.put(
+        `/auth/users/${userId}/role`,
         { role: newRole },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -57,7 +57,7 @@ const UserManager = () => {
     if (!window.confirm('Are you sure you want to permanently delete this user account?')) return;
 
     try {
-      const res = await axios.delete(`/api/auth/users/${userId}`, {
+      const res = await api.delete(`/auth/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data.success) {

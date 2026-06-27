@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import BlogCard from '../components/BlogCard';
 
 const AuthorProfile = () => {
@@ -14,7 +14,7 @@ const AuthorProfile = () => {
       try {
         setLoading(true);
         // Query blogs where author is this id and status is Published
-        const res = await axios.get(`/api/blogs?authorId=${id}&status=Published`);
+        const res = await api.get(`/blogs?authorId=${id}&status=Published`);
         if (res.data.success) {
           setBlogs(res.data.data);
           

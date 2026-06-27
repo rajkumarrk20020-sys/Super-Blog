@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../api';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -32,7 +32,7 @@ const Navbar = () => {
       return;
     }
     try {
-      const res = await axios.get(`/api/blogs/suggestions?search=${encodeURIComponent(val)}`);
+      const res = await api.get(`/blogs/suggestions?search=${encodeURIComponent(val)}`);
       if (res.data.success) {
         setSuggestions(res.data.data);
       }

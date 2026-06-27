@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import CommentSection from '../components/CommentSection';
 
 const BlogDetail = () => {
@@ -17,7 +17,7 @@ const BlogDetail = () => {
         setError(null);
         
         // Fetch blog by slug or ID
-        const res = await axios.get(`/api/blogs/${slug}`);
+        const res = await api.get(`/blogs/${slug}`);
         if (res.data.success) {
           const fetchedBlog = res.data.data;
           setBlog(fetchedBlog);
@@ -44,7 +44,7 @@ const BlogDetail = () => {
           metaKey.content = fetchedBlog.metaKeywords ? fetchedBlog.metaKeywords.join(', ') : '';
 
           // Fetch related blogs in the same category
-          const relatedRes = await axios.get(`/api/blogs/${fetchedBlog._id}/related`);
+          const relatedRes = await api.get(`/blogs/${fetchedBlog._id}/related`);
           if (relatedRes.data.success) {
             setRelated(relatedRes.data.data);
           }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 
 const BlogManager = () => {
@@ -14,10 +14,10 @@ const BlogManager = () => {
       const isAdmin = user?.role === 'Admin';
       // If Admin, fetch all. If Author, restrict by author ID.
       const url = isAdmin 
-        ? '/api/blogs?showAll=true&limit=100'
-        : `/api/blogs?authorId=${user?._id}&showAll=true&limit=100`;
+        ? '/blogs?showAll=true&limit=100'
+        : `/blogs?authorId=${user?._id}&showAll=true&limit=100`;
 
-      const res = await axios.get(url);
+      const res = await api.get(url);
       if (res.data.success) {
         setBlogs(res.data.data);
       }
@@ -39,7 +39,7 @@ const BlogManager = () => {
     if (!window.confirm('Are you sure you want to delete this blog post?')) return;
 
     try {
-      const res = await axios.delete(`/api/blogs/${id}`, {
+      const res = await api.delete(`/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data.success) {
@@ -55,8 +55,8 @@ const BlogManager = () => {
   const handleTogglePublish = async (blog) => {
     const newStatus = blog.status === 'Published' ? 'Draft' : 'Published';
     try {
-      const res = await axios.put(
-        `/api/blogs/${blog._id}`,
+      const res = await api.put(
+        `/blogs/${blog._id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

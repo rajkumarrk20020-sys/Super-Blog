@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { AuthContext } from '../context/AuthContext';
 
 const Contact = () => {
@@ -23,7 +23,7 @@ const Contact = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.post('/api/contact', formData);
+      const res = await api.post('/contact', formData);
       if (res.data.success) {
         showToast('Your message has been submitted. We will contact you soon.', 'success');
         setFormData({

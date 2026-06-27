@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 
 const CategoryManager = () => {
@@ -17,7 +17,7 @@ const CategoryManager = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/categories');
+      const res = await api.get('/categories');
       if (res.data.success) {
         setCategories(res.data.data);
       }
@@ -57,8 +57,8 @@ const CategoryManager = () => {
       setSubmitting(true);
       if (editingId) {
         // Edit category
-        const res = await axios.put(
-          `/api/categories/${editingId}`,
+        const res = await api.put(
+          `/categories/${editingId}`,
           { name, description },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -71,8 +71,8 @@ const CategoryManager = () => {
         }
       } else {
         // Create category
-        const res = await axios.post(
-          '/api/categories',
+        const res = await api.post(
+          '/categories',
           { name, description },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -95,7 +95,7 @@ const CategoryManager = () => {
     if (!window.confirm('Are you sure you want to delete this category?')) return;
 
     try {
-      const res = await axios.delete(`/api/categories/${id}`, {
+      const res = await api.delete(`/categories/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data.success) {

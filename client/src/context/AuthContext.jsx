@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 export const AuthContext = createContext();
 
@@ -11,9 +11,9 @@ export const AuthProvider = ({ children }) => {
 
   // Set global authorization header
   if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   } else {
-    delete axios.defaults.headers.common['Authorization'];
+    delete api.defaults.headers.common['Authorization'];
   }
 
   const showToast = (message, type = 'info') => {
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   const loadProfile = async (currentToken) => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/auth/profile', {
+      const res = await api.get('/auth/profile', {
         headers: { Authorization: `Bearer ${currentToken}` }
       });
       if (res.data.success) {
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setLoading(true);
-      const res = await axios.post('/api/auth/login', { email, password });
+      const res = await api.post('/auth/login', { email, password });
       if (res.data.success) {
         const { token: userToken, ...userData } = res.data.data;
         localStorage.setItem('token', userToken);
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (formData) => {
     try {
       setLoading(true);
-      const res = await axios.post('/api/auth/register', formData, {
+      const res = await api.post('/auth/register', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -98,7 +98,7 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (formData) => {
     try {
       setLoading(true);
-      const res = await axios.put('/api/auth/profile', formData, {
+      const res = await api.put('/auth/profile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -121,8 +121,8 @@ export const AuthProvider = ({ children }) => {
   const changePassword = async (currentPassword, newPassword) => {
     try {
       setLoading(true);
-      const res = await axios.put(
-        '/api/auth/change-password',
+      const res = await api.put(
+        '/auth/change-password',
         { currentPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -143,7 +143,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     setToken('');
     setUser(null);
-    delete axios.defaults.headers.common['Authorization'];
+    delete api.defaults.headers.common['Authorization'];
     showToast('Logged out successfully.', 'info');
   };
 

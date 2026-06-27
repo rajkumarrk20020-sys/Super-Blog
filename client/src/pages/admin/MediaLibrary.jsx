@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 
 const MediaLibrary = () => {
@@ -31,8 +31,8 @@ const MediaLibrary = () => {
   const fetchMedia = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        `/api/media?page=${page}&limit=12&search=${encodeURIComponent(search)}&sortBy=${sortBy}`,
+      const res = await api.get(
+        `/media?page=${page}&limit=12&search=${encodeURIComponent(search)}&sortBy=${sortBy}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.data.success) {
@@ -79,7 +79,7 @@ const MediaLibrary = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const res = await axios.post('/api/media', formData, {
+      const res = await api.post('/media', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -109,7 +109,7 @@ const MediaLibrary = () => {
     if (!window.confirm('Are you sure you want to delete this media file? This will remove it from the server.')) return;
 
     try {
-      const res = await axios.delete(`/api/media/${id}`, {
+      const res = await api.delete(`/media/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data.success) {
@@ -129,8 +129,8 @@ const MediaLibrary = () => {
     if (!window.confirm(`Are you sure you want to delete all ${selectedIds.length} selected files?`)) return;
 
     try {
-      const res = await axios.post(
-        '/api/media/bulk-delete',
+      const res = await api.post(
+        '/media/bulk-delete',
         { ids: selectedIds },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -159,8 +159,8 @@ const MediaLibrary = () => {
     if (!renameValue.trim()) return;
 
     try {
-      const res = await axios.put(
-        `/api/media/${renameItem._id}/rename`,
+      const res = await api.put(
+        `/media/${renameItem._id}/rename`,
         { newName: renameValue },
         { headers: { Authorization: `Bearer ${token}` } }
       );

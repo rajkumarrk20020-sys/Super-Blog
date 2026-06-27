@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import BlogCard from '../components/BlogCard';
 import FeaturedBlog from '../components/FeaturedBlog';
 
@@ -15,19 +15,19 @@ const Home = () => {
       try {
         setLoading(true);
         // Fetch published blogs (max 6)
-        const blogsRes = await axios.get('/api/blogs?limit=6&status=Published');
+        const blogsRes = await api.get('/blogs?limit=6&status=Published');
         if (blogsRes.data.success) {
           setBlogs(blogsRes.data.data);
         }
 
         // Fetch trending blogs (sorted by views)
-        const trendingRes = await axios.get('/api/blogs?limit=3&status=Published&sortBy=trending');
+        const trendingRes = await api.get('/blogs?limit=3&status=Published&sortBy=trending');
         if (trendingRes.data.success) {
           setTrending(trendingRes.data.data);
         }
 
         // Fetch categories
-        const categoriesRes = await axios.get('/api/categories');
+        const categoriesRes = await api.get('/categories');
         if (categoriesRes.data.success) {
           setCategories(categoriesRes.data.data);
         }

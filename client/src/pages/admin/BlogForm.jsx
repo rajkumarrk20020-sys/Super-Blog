@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 import RichTextEditor from '../../components/RichTextEditor';
 
@@ -33,7 +33,7 @@ const BlogForm = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('/api/categories');
+      const res = await api.get('/categories');
       if (res.data.success) {
         setCategories(res.data.data);
         if (res.data.data.length > 0 && !isEditMode) {
@@ -48,7 +48,7 @@ const BlogForm = () => {
   const fetchBlogDetails = async () => {
     try {
       setFetchingData(true);
-      const res = await axios.get(`/api/blogs/${id}`);
+      const res = await api.get(`/blogs/${id}`);
       if (res.data.success) {
         const blog = res.data.data;
         setTitle(blog.title);
@@ -128,14 +128,14 @@ const BlogForm = () => {
 
       let res;
       if (isEditMode) {
-        res = await axios.put(`/api/blogs/${id}`, formData, {
+        res = await api.put(`/blogs/${id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`
           }
         });
       } else {
-        res = await axios.post('/api/blogs', formData, {
+        res = await api.post('/blogs', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`

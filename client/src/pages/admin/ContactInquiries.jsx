@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 
 const ContactInquiries = () => {
@@ -12,7 +12,7 @@ const ContactInquiries = () => {
     const fetchInquiries = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('/api/contact', {
+        const res = await api.get('/contact', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.data.success) {

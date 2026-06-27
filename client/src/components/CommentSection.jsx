@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { AuthContext } from '../context/AuthContext';
 
 const CommentSection = ({ blogId }) => {
@@ -21,7 +21,7 @@ const CommentSection = ({ blogId }) => {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`/api/comments/blog/${blogId}`);
+      const res = await api.get(`/comments/blog/${blogId}`);
       if (res.data.success) {
         setComments(res.data.data);
       }
@@ -44,8 +44,8 @@ const CommentSection = ({ blogId }) => {
 
     try {
       setSubmitting(true);
-      const res = await axios.post(
-        '/api/comments',
+      const res = await api.post(
+        '/comments',
         { blogId, comment: newComment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -83,8 +83,8 @@ const CommentSection = ({ blogId }) => {
 
     try {
       setReplySubmitting(true);
-      const res = await axios.post(
-        `/api/comments/${parentId}/reply`,
+      const res = await api.post(
+        `/comments/${parentId}/reply`,
         { comment: replyText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -122,8 +122,8 @@ const CommentSection = ({ blogId }) => {
     }
 
     try {
-      const res = await axios.put(
-        `/api/comments/${commentId}/like`,
+      const res = await api.put(
+        `/comments/${commentId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -147,8 +147,8 @@ const CommentSection = ({ blogId }) => {
     if (!reason) return;
 
     try {
-      const res = await axios.put(
-        `/api/comments/${commentId}/report`,
+      const res = await api.put(
+        `/comments/${commentId}/report`,
         { reason },
         { headers: { Authorization: `Bearer ${token}` } }
       );

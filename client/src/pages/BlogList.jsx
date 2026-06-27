@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import BlogCard from '../components/BlogCard';
 
 const BlogList = () => {
@@ -35,7 +35,7 @@ const BlogList = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('/api/categories');
+      const res = await api.get('/categories');
       if (res.data.success) {
         setCategories(res.data.data);
       }
@@ -46,7 +46,7 @@ const BlogList = () => {
 
   const fetchAuthors = async () => {
     try {
-      const res = await axios.get('/api/auth/authors');
+      const res = await api.get('/auth/authors');
       if (res.data.success) {
         setAuthors(res.data.data);
       }
@@ -58,8 +58,8 @@ const BlogList = () => {
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        `/api/blogs?status=Published&category=${categoryParam}&search=${searchParam}&page=${pageParam}&tag=${tagParam}&authorId=${authorParam}&sortBy=${sortByParam}&startDate=${startDateParam}&endDate=${endDateParam}&limit=6`
+      const res = await api.get(
+        `/blogs?status=Published&category=${categoryParam}&search=${searchParam}&page=${pageParam}&tag=${tagParam}&authorId=${authorParam}&sortBy=${sortByParam}&startDate=${startDateParam}&endDate=${endDateParam}&limit=6`
       );
       if (res.data.success) {
         setBlogs(res.data.data);

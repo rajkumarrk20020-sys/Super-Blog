@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api';
 import { AuthContext } from '../../context/AuthContext';
 
 const Dashboard = () => {
@@ -12,7 +12,7 @@ const Dashboard = () => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('/api/dashboard/stats', {
+        const res = await api.get('/dashboard/stats', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.data.success) {
