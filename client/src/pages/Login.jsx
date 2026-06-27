@@ -11,6 +11,7 @@ const Login = () => {
   });
 
   const { email, password } = formData;
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     // If already logged in, redirect
@@ -37,66 +38,83 @@ const Login = () => {
 
   return (
     <div className="container py-5 my-5">
-      <div className="row justify-content-center">
-        <div className="col-md-5">
-          <div className="card border-0 shadow-lg rounded-4 p-5 bg-white">
-            
-            <div className="text-center mb-4">
-              <i className="bi bi-rocket-takeoff-fill text-primary fs-1"></i>
-              <h2 className="fw-bold mt-2">Welcome Back</h2>
-              <p className="text-muted">Sign in to manage your blogs and discussions</p>
-            </div>
+      <div className="auth-split">
+        <div className="auth-left">
+          <div className="auth-illustration">
+            <svg width="100%" height="320" viewBox="0 0 800 380" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden>
+              <rect x="0" y="0" width="800" height="380" rx="24" fill="url(#g)" />
+              <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                  <stop offset="0" stopColor="#eef2ff" />
+                  <stop offset="1" stopColor="#f3e8ff" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div className="auth-features mt-4">
+            <div className="auth-feature">Fast publishing</div>
+            <div className="auth-feature">Clean editor</div>
+            <div className="auth-feature">Secure by default</div>
+          </div>
+        </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label fw-semibold">Email Address</label>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control form-control-premium"
-                  placeholder="john@example.com"
-                  value={email}
-                  onChange={handleChange}
-                  required
-                />
+        <div className="auth-right">
+          <div className="auth-card">
+            <div className="auth-hero p-4">
+              <div className="text-start">
+                <i className="bi bi-rocket-takeoff-fill text-primary fs-2"></i>
+                <h2 className="fw-bold">Welcome Back</h2>
+                <p className="text-muted">Continue your writing journey.</p>
               </div>
-              <div className="mb-4">
-                <label className="form-label fw-semibold">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  className="form-control form-control-premium"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <button type="submit" className="btn btn-premium-primary w-100 py-2 mb-3" disabled={loading}>
-                {loading ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Signing in...
-                  </>
-                ) : (
-                  'Login'
-                )}
-              </button>
-            </form>
-
-            <div className="text-center mt-3">
-              <span className="text-muted">Don't have an account? </span>
-              <Link to="/register" className="fw-bold text-primary text-decoration-none">Register Here</Link>
             </div>
 
-            {/* Quick Helper Credentials */}
-            <div className="alert alert-secondary rounded-3 mt-4 mb-0 text-center" style={{ fontSize: '13px' }}>
-              <strong>Demo Credentials:</strong><br />
-              Admin: <code>admin@smartblog.com</code> / <code>admin123</code><br />
-              Author: <code>author@smartblog.com</code> / <code>author123</code>
-            </div>
+            <div className="p-4 bg-white">
+              <form onSubmit={handleSubmit}>
+                <div className="form-floating-auth">
+                  <input type="email" name="email" value={email} onChange={handleChange} required placeholder=" " />
+                  <label>Email Address</label>
+                </div>
 
+                <div className="form-floating-auth" style={{ position: 'relative' }}>
+                  <input type={showPassword ? 'text' : 'password'} name="password" value={password} onChange={handleChange} required placeholder=" " />
+                  <label>Password</label>
+                  <button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)} aria-label="Toggle password visibility">
+                    {showPassword ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
+                  </button>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" id="rememberMe" />
+                    <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
+                  </div>
+                  <Link to="/forgot" className="text-decoration-none">Forgot Password?</Link>
+                </div>
+
+                <button type="submit" className="btn btn-premium-primary w-100 py-2 mb-3" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Signing in...
+                    </>
+                  ) : (
+                    'Login'
+                  )}
+                </button>
+
+                <div className="auth-divider">OR</div>
+
+                <div className="text-center">
+                  <button type="button" className="oauth-btn w-100 mb-3">
+                    <i className="bi bi-google"></i>
+                    Continue with Google
+                  </button>
+                  <div className="text-muted">Don't have an account? <Link to="/register" className="fw-semibold text-primary">Create one</Link></div>
+                </div>
+              </form>
+
+            </div>
+            <div className="auth-foot">Use demo credentials shown on register page for quick access.</div>
           </div>
         </div>
       </div>

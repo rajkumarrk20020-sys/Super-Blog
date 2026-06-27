@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import BlogCard from '../components/BlogCard';
 
@@ -128,223 +128,241 @@ const BlogList = () => {
     setSearchParams({});
   };
 
+  const featuredBlog = blogs.length > 0 ? blogs[0] : null;
+  const featuredArticles = blogs.length > 1 ? blogs.slice(1) : [];
+  const hasActiveFilters = categoryParam || searchParam || tagParam || authorParam || startDateParam || endDateParam || sortByParam !== 'latest';
+
   return (
     <div className="container py-5">
-      <div className="row">
-        
-        {/* Sidebar / Filters Column */}
-        <div className="col-lg-3 mb-4">
-          
-          {/* Clear Filters Button */}
-          {(categoryParam || searchParam || tagParam || authorParam || startDateParam || endDateParam || sortByParam !== 'latest') && (
-            <button
-              type="button"
-              className="btn btn-outline-danger w-100 rounded-3 py-2 fw-semibold mb-4"
-              onClick={handleClearFilters}
-            >
-              Clear Filters <i className="bi bi-x-circle ms-1"></i>
-            </button>
-          )}
-
-          {/* Search & Dates Card */}
-          <div className="card border-0 shadow-sm p-4 rounded-4 mb-4">
-            <h5 className="fw-bold mb-3">Search & Date</h5>
-            <form onSubmit={handleApplyFilters}>
+      <section className="blog-list-hero rounded-4 border border-1 border-light shadow-sm p-5 mb-5 bg-white">
+        <div className="row align-items-center gy-4">
+          <div className="col-lg-7">
+            <span className="eyebrow-label text-primary fw-semibold mb-3 d-inline-block">Explore SmartBlog</span>
+            <h1 className="display-5 fw-bold mb-3">Discover Stories That Inspire</h1>
+            <p className="lead text-muted">Explore insightful articles on technology, business, lifestyle and modern innovation.</p>
+          </div>
+          <div className="col-lg-5">
+            <form className="hero-search-card p-4 rounded-4 bg-light border" onSubmit={handleApplyFilters}>
               <div className="mb-3">
-                <label className="form-label fw-semibold text-secondary small">Keyword</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Keyword..."
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                />
+                <label className="form-label fw-medium text-secondary small">Search articles</label>
+                <div className="input-group shadow-sm rounded-4 overflow-hidden bg-white border">
+                  <span className="input-group-text bg-white border-0 text-secondary"><i className="bi bi-search"></i></span>
+                  <input
+                    type="text"
+                    className="form-control border-0"
+                    placeholder="Search stories, authors, or topics"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    aria-label="Search articles"
+                  />
+                </div>
               </div>
-              
-              <div className="mb-3">
-                <label className="form-label fw-semibold text-secondary small">Start Date</label>
-                <input
-                  type="date"
-                  className="form-control text-secondary"
-                  value={startDateInput}
-                  onChange={(e) => setStartDateInput(e.target.value)}
-                />
+              <div className="row g-3 align-items-end">
+                <div className="col-sm-6">
+                  <label className="form-label fw-medium text-secondary small">Category</label>
+                  <select className="form-select rounded-4" value={categoryParam} onChange={(e) => handleCategorySelect(e.target.value)}>
+                    <option value="">All categories</option>
+                    {categories.map((cat) => (
+                      <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-sm-6">
+                  <label className="form-label fw-medium text-secondary small">Sort by</label>
+                  <select className="form-select rounded-4" value={sortByParam} onChange={(e) => updateParams({ sortBy: e.target.value })}>
+                    <option value="latest">Latest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="mostViewed">Most Viewed</option>
+                    <option value="mostCommented">Most Commented</option>
+                    <option value="trending">Trending</option>
+                  </select>
+                </div>
+                <div className="col-12 d-grid">
+                  <button type="submit" className="btn btn-premium-primary rounded-4 py-2 fw-semibold">Search stories</button>
+                </div>
               </div>
-
-              <div className="mb-3">
-                <label className="form-label fw-semibold text-secondary small">End Date</label>
-                <input
-                  type="date"
-                  className="form-control text-secondary"
-                  value={endDateInput}
-                  onChange={(e) => setEndDateInput(e.target.value)}
-                />
-              </div>
-
-              <button className="btn btn-primary btn-sm w-100 rounded-3 py-2 fw-semibold" type="submit">
-                Apply Search & Date <i className="bi bi-funnel ms-1"></i>
-              </button>
             </form>
           </div>
+        </div>
 
-          {/* Categories Card */}
-          <div className="card border-0 shadow-sm p-4 rounded-4 mb-4">
-            <h5 className="fw-bold mb-3">Categories</h5>
-            <div className="list-group list-group-flush">
+        {categories.length > 0 && (
+          <div className="popular-categories mt-4 pt-3 border-top">
+            <div className="d-flex align-items-center justify-content-between flex-wrap gap-3">
+              <span className="fw-semibold">Popular categories</span>
+              {hasActiveFilters && (
+                <button type="button" className="btn btn-link text-secondary text-decoration-none" onClick={handleClearFilters}>Clear filters</button>
+              )}
+            </div>
+            <div className="mt-3 d-flex flex-wrap gap-2">
               <button
                 type="button"
-                className={`list-group-item list-group-item-action border-0 px-0 d-flex justify-content-between align-items-center fw-medium ${!categoryParam ? 'text-primary' : 'text-secondary'}`}
+                className={`category-pill ${!categoryParam ? 'active' : ''}`}
                 onClick={() => handleCategorySelect('')}
               >
-                <span>All Categories</span>
-                <i className="bi bi-chevron-right fs-12"></i>
+                All
               </button>
-              {categories.map((cat) => (
+              {categories.slice(0, 8).map((cat) => (
                 <button
                   key={cat._id}
                   type="button"
-                  className={`list-group-item list-group-item-action border-0 px-0 d-flex justify-content-between align-items-center fw-medium ${categoryParam === cat.slug ? 'text-primary' : 'text-secondary'}`}
+                  className={`category-pill ${categoryParam === cat.slug ? 'active' : ''}`}
                   onClick={() => handleCategorySelect(cat.slug)}
                 >
-                  <span>{cat.name}</span>
-                  <i className="bi bi-chevron-right fs-12"></i>
+                  {cat.name}
                 </button>
               ))}
             </div>
           </div>
+        )}
+      </section>
 
-          {/* Author Card */}
-          <div className="card border-0 shadow-sm p-4 rounded-4 mb-4">
-            <h5 className="fw-bold mb-3">Author</h5>
-            <select
-              className="form-select rounded-3 text-secondary"
-              value={authorParam}
-              onChange={(e) => updateParams({ author: e.target.value })}
-            >
-              <option value="">All Authors</option>
-              {authors.map((author) => (
-                <option key={author._id} value={author._id}>
-                  {author.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Tags Card */}
-          <div className="card border-0 shadow-sm p-4 rounded-4 mb-4">
-            <h5 className="fw-bold mb-3">Popular Tags</h5>
-            <div className="d-flex flex-wrap gap-2">
-              {tagsList.map((t) => {
-                const isActive = tagParam === t;
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    className={`btn btn-sm rounded-pill px-3 py-1 fw-medium transition-all ${
-                      isActive
-                        ? 'btn-primary'
-                        : 'btn-outline-secondary'
-                    }`}
-                    onClick={() => updateParams({ tag: isActive ? '' : t })}
-                  >
-                    #{t}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-        </div>
-
-        {/* Blogs Listing Column */}
-        <div className="col-lg-9">
-          
-          <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between mb-4 gap-3">
-            <h2 className="fw-bold mb-0">
-              {categoryParam ? `Category: ${categories.find(c => c.slug === categoryParam)?.name || categoryParam}` : 'All Articles'}
-            </h2>
-            <div className="d-flex align-items-center gap-3">
-              <span className="text-muted fw-medium whitespace-nowrap">{pagination.total} articles found</span>
-              <select
-                className="form-select form-select-sm rounded-3 shadow-sm border-0 bg-white"
-                style={{ width: '160px', padding: '0.375rem 2.25rem 0.375rem 0.75rem' }}
-                value={sortByParam}
-                onChange={(e) => updateParams({ sortBy: e.target.value })}
-              >
-                <option value="latest">Latest</option>
-                <option value="oldest">Oldest</option>
-                <option value="mostViewed">Most Viewed</option>
-                <option value="mostCommented">Most Commented</option>
-                <option value="trending">Trending</option>
-              </select>
-            </div>
-          </div>
-
+      <div className="row gx-5">
+        <main className="col-xl-8">
           {loading ? (
             <div className="row g-4">
               {[1, 2, 3, 4].map((n) => (
                 <div key={n} className="col-md-6">
-                  <div className="skeleton" style={{ width: '100%', height: '380px', borderRadius: '16px' }}></div>
+                  <div className="skeleton-card rounded-4"></div>
                 </div>
               ))}
             </div>
           ) : blogs.length > 0 ? (
             <>
+              {featuredBlog && (
+                <section className="featured-article-card mb-5 rounded-4 overflow-hidden shadow-sm border bg-white">
+                  <div className="row g-0 align-items-stretch">
+                    <div className="col-lg-6 position-relative featured-image-panel overflow-hidden">
+                      {featuredBlog.featuredImage ? (
+                        <img src={featuredBlog.featuredImage} alt={featuredBlog.title} className="w-100 h-100 object-cover" loading="lazy" />
+                      ) : (
+                        <div className="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white">
+                          <i className="bi bi-image fs-1"></i>
+                        </div>
+                      )}
+                      <span className="category-pill position-absolute top-0 start-0 m-4">{featuredBlog.category?.name || 'Featured'}</span>
+                    </div>
+                    <div className="col-lg-6 p-5 d-flex flex-column justify-content-between">
+                      <div>
+                        <span className="eyebrow-label text-primary fw-semibold mb-3 d-inline-block">Featured Story</span>
+                        <h2 className="fw-bold mb-3">{featuredBlog.title}</h2>
+                        <p className="text-muted mb-4">{featuredBlog.excerpt || featuredBlog.content?.replace(/<[^>]+>/g, '').slice(0, 160) + '...'}</p>
+                      </div>
+                      <div>
+                        <div className="d-flex align-items-center gap-3 mb-4">
+                          {featuredBlog.author?.profileImage ? (
+                            <img src={featuredBlog.author.profileImage} alt={featuredBlog.author.name} className="rounded-circle" style={{ width: '48px', height: '48px', objectFit: 'cover' }} loading="lazy" />
+                          ) : (
+                            <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '48px', height: '48px', fontSize: '18px' }}>
+                              {featuredBlog.author?.name?.charAt(0).toUpperCase() || 'A'}
+                            </div>
+                          )}
+                          <div>
+                            <p className="mb-1 fw-semibold">{featuredBlog.author?.name || 'Author'}</p>
+                            <p className="text-muted small mb-0">{featuredBlog.readingTime || 1} min read • {new Date(featuredBlog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                          </div>
+                        </div>
+                        <Link to={`/blogs/${featuredBlog.slug}`} className="btn btn-premium-primary rounded-pill px-4 py-2">Read more</Link>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              )}
+
               <div className="row g-4">
-                {blogs.map((blog) => (
+                {featuredArticles.map((blog) => (
                   <div key={blog._id} className="col-md-6">
                     <BlogCard blog={blog} />
                   </div>
                 ))}
               </div>
 
-              {/* Pagination controls */}
               {pagination.pages > 1 && (
                 <nav className="d-flex justify-content-center mt-5">
-                  <ul className="pagination pagination-rounded gap-2">
+                  <ul className="pagination pagination-modern gap-2">
                     <li className={`page-item ${pagination.page === 1 ? 'disabled' : ''}`}>
-                      <button
-                        className="page-link border-0 shadow-sm rounded-3 px-3 py-2"
-                        onClick={() => handlePageSelect(pagination.page - 1)}
-                      >
-                        <i className="bi bi-chevron-left"></i>
-                      </button>
+                      <button className="page-link" onClick={() => handlePageSelect(pagination.page - 1)}><i className="bi bi-chevron-left"></i></button>
                     </li>
                     {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
                       <li key={p} className={`page-item ${pagination.page === p ? 'active' : ''}`}>
-                        <button
-                          className="page-link border-0 shadow-sm rounded-3 px-3 py-2"
-                          onClick={() => handlePageSelect(p)}
-                        >
-                          {p}
-                        </button>
+                        <button className="page-link" onClick={() => handlePageSelect(p)}>{p}</button>
                       </li>
                     ))}
                     <li className={`page-item ${pagination.page === pagination.pages ? 'disabled' : ''}`}>
-                      <button
-                        className="page-link border-0 shadow-sm rounded-3 px-3 py-2"
-                        onClick={() => handlePageSelect(pagination.page + 1)}
-                      >
-                        <i className="bi bi-chevron-right"></i>
-                      </button>
+                      <button className="page-link" onClick={() => handlePageSelect(pagination.page + 1)}><i className="bi bi-chevron-right"></i></button>
                     </li>
                   </ul>
                 </nav>
               )}
             </>
           ) : (
-            <div className="text-center py-5 bg-white rounded-4 shadow-sm mt-4">
-              <i className="bi bi-journal-x fs-1 text-muted d-block mb-3"></i>
-              <h4>No articles found</h4>
-              <p className="text-muted mb-4">Try clearing filters or search parameter to find what you need.</p>
-              <button className="btn btn-primary" onClick={handleClearFilters}>
-                View All Articles
-              </button>
+            <div className="empty-state-card rounded-4 shadow-sm p-5 text-center bg-white">
+              <div className="mb-4">
+                <i className="bi bi-file-earmark-excel-fill fs-1 text-primary"></i>
+              </div>
+              <h3 className="fw-bold mb-2">No Articles Found</h3>
+              <p className="text-muted mb-4">Your search or filters didn’t match any stories. Try adjusting your search or clear all filters.</p>
+              <button className="btn btn-outline-primary rounded-pill" onClick={handleClearFilters}>Clear filters</button>
             </div>
           )}
+        </main>
 
-        </div>
-
+        <aside className="col-xl-4">
+          <div className="filter-panel rounded-4 bg-white border shadow-sm p-4 sticky-lg">
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <div>
+                <p className="text-uppercase text-primary fs-xs fw-semibold mb-1">Refine search</p>
+                <h5 className="fw-bold mb-0">Filters</h5>
+              </div>
+              {hasActiveFilters && (
+                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={handleClearFilters}>Reset</button>
+              )}
+            </div>
+            <form onSubmit={handleApplyFilters}>
+              <div className="mb-4">
+                <label className="form-label fw-semibold text-secondary small">Keyword</label>
+                <input type="text" className="form-control rounded-4" placeholder="Search stories" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+              </div>
+              <div className="mb-4">
+                <label className="form-label fw-semibold text-secondary small">Author</label>
+                <select className="form-select rounded-4" value={authorParam} onChange={(e) => updateParams({ author: e.target.value })}>
+                  <option value="">All authors</option>
+                  {authors.map((author) => (
+                    <option key={author._id} value={author._id}>{author.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="row g-3 mb-4">
+                <div className="col-sm-6">
+                  <label className="form-label fw-semibold text-secondary small">Start date</label>
+                  <input type="date" className="form-control rounded-4" value={startDateInput} onChange={(e) => setStartDateInput(e.target.value)} />
+                </div>
+                <div className="col-sm-6">
+                  <label className="form-label fw-semibold text-secondary small">End date</label>
+                  <input type="date" className="form-control rounded-4" value={endDateInput} onChange={(e) => setEndDateInput(e.target.value)} />
+                </div>
+              </div>
+              <button type="submit" className="btn btn-premium-primary rounded-4 w-100 py-2">Apply filters</button>
+            </form>
+            <div className="mt-5">
+              <p className="fw-semibold text-secondary mb-3">Popular tags</p>
+              <div className="d-flex flex-wrap gap-2">
+                {tagsList.map((t) => {
+                  const isActive = tagParam === t;
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      className={`category-pill ${isActive ? 'active' : ''}`}
+                      onClick={() => updateParams({ tag: isActive ? '' : t })}
+                    >
+                      #{t}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );

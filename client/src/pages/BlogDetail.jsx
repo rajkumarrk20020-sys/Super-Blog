@@ -103,161 +103,117 @@ const BlogDetail = () => {
   return (
     <div className="container py-5">
       <div className="row justify-content-center">
-        
-        {/* Main Content Area */}
-        <div className="col-lg-8">
-          {/* Breadcrumb / Category */}
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb mb-4">
-              <li className="breadcrumb-item"><Link to="/" className="text-decoration-none">Home</Link></li>
-              <li className="breadcrumb-item"><Link to="/blogs" className="text-decoration-none">Blogs</Link></li>
-              <li className="breadcrumb-item active" aria-current="page">{blog.category?.name}</li>
-            </ol>
-          </nav>
-
-          {/* Title */}
-          <h1 className="display-5 fw-extrabold mb-4">{blog.title}</h1>
-
-          {/* Author info & Metadata */}
-          <div className="d-flex align-items-center justify-content-between border-top border-bottom py-3 mb-4">
-            <div className="d-flex align-items-center gap-3">
-              {blog.author?.profileImage ? (
-                <img
-                  src={blog.author.profileImage}
-                  alt={blog.author.name}
-                  className="rounded-circle"
-                  style={{ width: '48px', height: '48px', objectFit: 'cover' }}
-                />
-              ) : (
-                <div className="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '48px', height: '48px' }}>
-                  {blog.author?.name ? blog.author.name.charAt(0).toUpperCase() : 'A'}
+        <div className="col-lg-10">
+          <section className="article-hero rounded-4 overflow-hidden shadow-sm mb-5">
+            {blog.featuredImage && (
+              <div className="hero-image position-relative overflow-hidden" style={{ minHeight: '420px' }}>
+                <img src={blog.featuredImage} alt={blog.title} className="w-100 h-100 object-cover" loading="lazy" />
+                <span className="article-category-pill position-absolute top-0 start-0 m-4">{blog.category?.name}</span>
+              </div>
+            )}
+            <div className="hero-content p-5 bg-white">
+              <div className="mb-3 text-uppercase text-primary fw-semibold letter-spacing">Featured article</div>
+              <h1 className="display-5 fw-bold mb-4">{blog.title}</h1>
+              <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 text-secondary mb-4">
+                <div className="d-flex align-items-center gap-3">
+                  {blog.author?.profileImage ? (
+                    <img src={blog.author.profileImage} alt={blog.author.name} className="rounded-circle" style={{ width: '52px', height: '52px', objectFit: 'cover' }} loading="lazy" />
+                  ) : (
+                    <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '52px', height: '52px', fontSize: '18px' }}>
+                      {blog.author?.name?.charAt(0).toUpperCase() || 'A'}
+                    </div>
+                  )}
+                  <div>
+                    <p className="mb-1 fw-semibold">{blog.author?.name || 'Author'}</p>
+                    <p className="text-muted small mb-0">{blog.author?.role || 'Contributor'}</p>
+                  </div>
                 </div>
-              )}
-              <div>
-                <span className="d-block fw-bold text-dark">
-                  By <Link to={`/author/${blog.author?._id}`} className="text-decoration-none text-dark hover-primary">{blog.author?.name || 'Deleted User'}</Link>
-                </span>
-                <span className="text-muted" style={{ fontSize: '13px' }}>
-                  Published on {formattedDate}
-                </span>
+                <div className="d-flex flex-wrap gap-3 text-muted small">
+                  <span>{formattedDate}</span>
+                  <span>{blog.readingTime || 1} min read</span>
+                  <span>{blog.views} views</span>
+                </div>
+              </div>
+              <div className="d-flex flex-wrap gap-2 align-items-center">
+                <button className="btn btn-outline-secondary rounded-pill btn-sm">Like</button>
+                <button className="btn btn-outline-secondary rounded-pill btn-sm">Bookmark</button>
+                <button className="btn btn-outline-secondary rounded-pill btn-sm">Share</button>
+                <button className="btn btn-outline-secondary rounded-pill btn-sm">Copy link</button>
               </div>
             </div>
-            
-            <div className="d-flex align-items-center gap-3 text-muted" style={{ fontSize: '14px' }}>
-              <span className="d-flex align-items-center gap-1">
-                <i className="bi bi-clock"></i> {blog.readingTime || 1} min read
-              </span>
-              <span className="d-flex align-items-center gap-1">
-                <i className="bi bi-eye-fill"></i> {blog.views} views
-              </span>
+          </section>
+
+          <div className="row gx-5">
+            <div className="col-lg-8">
+              <article className="article-body bg-white rounded-4 shadow-sm p-5 mb-5">
+                <div className="content-body blog-post-body">
+                  <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+                </div>
+
+                {blog.tags && blog.tags.length > 0 && (
+                  <div className="mt-5 pt-4 border-top">
+                    <h5 className="fw-semibold mb-3">Tags</h5>
+                    <div className="d-flex flex-wrap gap-2">
+                      {blog.tags.map((tag, idx) => (
+                        <span key={idx} className="tag-pill">#{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="author-card rounded-4 bg-offwhite border p-4 mt-5">
+                  <div className="d-flex align-items-center gap-3">
+                    {blog.author?.profileImage ? (
+                      <img src={blog.author.profileImage} alt={blog.author.name} className="rounded-circle" style={{ width: '64px', height: '64px', objectFit: 'cover' }} loading="lazy" />
+                    ) : (
+                      <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '64px', height: '64px', fontSize: '22px' }}>
+                        {blog.author?.name?.charAt(0).toUpperCase() || 'A'}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-uppercase text-primary small mb-1">About the author</p>
+                      <h5 className="fw-bold mb-1">{blog.author?.name}</h5>
+                      <p className="text-muted mb-0">{blog.author?.bio || 'Professional contributor to the SmartBlog portal.'}</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
             </div>
+            <aside className="col-lg-4">
+              <div className="toc-panel rounded-4 border bg-white shadow-sm p-4 mb-4 sticky-lg">
+                <h5 className="fw-bold mb-3">On this page</h5>
+                <div className="toc-links">
+                  {/* remain with existing content, not auto-generated */}
+                </div>
+              </div>
+            </aside>
           </div>
 
-          {/* Featured Image */}
-          {blog.featuredImage && (
-            <div className="mb-5 rounded-4 overflow-hidden shadow-sm" style={{ maxHeight: '450px' }}>
-              <img
-                src={blog.featuredImage}
-                alt={blog.title}
-                className="w-100"
-                style={{ objectFit: 'cover', maxHeight: '450px' }}
-              />
-            </div>
-          )}
-
-          {/* Blog Content */}
-          <article
-            className="fs-5 lh-lg text-secondary mb-5 blog-post-body"
-            dangerouslySetInnerHTML={{ __html: blog.content }}
-          ></article>
-
-          {/* Tags */}
-          {blog.tags && blog.tags.length > 0 && (
-            <div className="mb-4 pt-3 border-top">
-              <h6 className="fw-bold mb-2 d-inline-block me-3">Tags:</h6>
-              {blog.tags.map((tag, idx) => (
-                <span key={idx} className="badge bg-light text-dark rounded-pill py-2 px-3 me-2 border">
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Author Biography Info Card */}
-          {blog.author && (
-            <div className="card border-0 bg-light p-4 rounded-4 shadow-sm my-5">
-              <div className="row g-3 align-items-center">
-                <div className="col-auto">
-                  {blog.author.profileImage ? (
-                    <img
-                      src={blog.author.profileImage}
-                      alt={blog.author.name}
-                      className="rounded-circle shadow-sm"
-                      style={{ width: '70px', height: '70px', objectFit: 'cover' }}
-                    />
-                  ) : (
-                    <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style={{ width: '70px', height: '70px', fontSize: '24px' }}>
-                      {blog.author.name.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                <div className="col">
-                  <h6 className="fw-bold mb-1">About the Author: {blog.author.name}</h6>
-                  <p className="text-secondary small mb-2">{blog.author.bio || 'Professional contributor to the SmartBlog portal.'}</p>
-                  
-                  {/* Author Social Media Handles */}
-                  {blog.author.socialLinks && (
-                    <div className="d-flex gap-2">
-                      {blog.author.socialLinks.facebook && (
-                        <a href={blog.author.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-primary"><i className="bi bi-facebook fs-5"></i></a>
-                      )}
-                      {blog.author.socialLinks.twitter && (
-                        <a href={blog.author.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="text-dark"><i className="bi bi-twitter-x fs-5"></i></a>
-                      )}
-                      {blog.author.socialLinks.linkedin && (
-                        <a href={blog.author.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-info"><i className="bi bi-linkedin fs-5"></i></a>
-                      )}
-                      {blog.author.socialLinks.github && (
-                        <a href={blog.author.socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-dark"><i className="bi bi-github fs-5"></i></a>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Related Blogs Section */}
           {related.length > 0 && (
-            <div className="my-5 pt-5 border-top">
+            <div className="related-articles-section mb-5">
               <h3 className="fw-bold mb-4">Related Articles</h3>
               <div className="row g-4">
                 {related.map((item) => (
                   <div key={item._id} className="col-md-4">
                     <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                      <div style={{ height: '140px' }}>
+                      <div className="ratio ratio-16x9">
                         {item.featuredImage ? (
-                          <img
-                            src={item.featuredImage}
-                            alt={item.title}
-                            className="w-100 h-100"
-                            style={{ objectFit: 'cover' }}
-                          />
+                          <img src={item.featuredImage} alt={item.title} className="w-100 h-100 object-cover" />
                         ) : (
                           <div className="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center text-white">
                             <i className="bi bi-image fs-4"></i>
                           </div>
                         )}
                       </div>
-                      <div className="card-body p-3">
-                        <h6 className="fw-bold mb-2">
-                          <Link to={`/blogs/${item.slug}`} className="text-dark text-decoration-none hover-primary">
-                            {item.title}
-                          </Link>
+                      <div className="card-body p-4">
+                        <h6 className="fw-semibold mb-2 line-clamp-2">
+                          <Link to={`/blogs/${item.slug}`} className="text-dark text-decoration-none hover-primary">{item.title}</Link>
                         </h6>
-                        <span className="text-muted" style={{ fontSize: '11px' }}>
-                          By {item.author?.name || 'Author'}
-                        </span>
+                        <p className="text-muted small mb-3">{item.author?.name || 'Author'}</p>
+                        <div className="d-flex align-items-center justify-content-between text-muted small">
+                          <span>{item.readingTime || 1} min read</span>
+                          <span>{item.views} views</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -266,13 +222,10 @@ const BlogDetail = () => {
             </div>
           )}
 
-          {/* Comments Section */}
-          <div className="pt-5 border-top">
+          <div className="comments-wrapper rounded-4 bg-white shadow-sm p-5 mb-5">
             <CommentSection blogId={blog._id} />
           </div>
-
         </div>
-
       </div>
     </div>
   );

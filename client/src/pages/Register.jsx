@@ -11,6 +11,7 @@ const Register = () => {
     password: ''
   });
   const [profileImageFile, setProfileImageFile] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { name, email, password } = formData;
 
@@ -48,80 +49,89 @@ const Register = () => {
 
   return (
     <div className="container py-5 my-4">
-      <div className="row justify-content-center">
-        <div className="col-md-5">
-          <div className="card border-0 shadow-lg rounded-4 p-5 bg-white">
-            
-            <div className="text-center mb-4">
-              <i className="bi bi-person-plus-fill text-primary fs-1"></i>
-              <h2 className="fw-bold mt-2">Create Account</h2>
-              <p className="text-muted">Register to join the blogging community</p>
+      <div className="auth-split">
+        <div className="auth-left">
+          <div className="auth-illustration">
+            <svg width="100%" height="320" viewBox="0 0 800 380" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden>
+              <rect x="0" y="0" width="800" height="380" rx="24" fill="url(#g2)" />
+              <defs>
+                <linearGradient id="g2" x1="0" x2="1">
+                  <stop offset="0" stopColor="#eef2ff" />
+                  <stop offset="1" stopColor="#f3e8ff" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div className="auth-features mt-4">
+            <div className="auth-feature">Publish faster</div>
+            <div className="auth-feature">Built for creators</div>
+            <div className="auth-feature">Secure accounts</div>
+          </div>
+        </div>
+
+        <div className="auth-right">
+          <div className="auth-card">
+            <div className="auth-hero p-4">
+              <div className="text-start">
+                <i className="bi bi-person-plus-fill text-primary fs-2"></i>
+                <h2 className="fw-bold">Create Your Account</h2>
+                <p className="text-muted">Join SmartBlog and start sharing your work.</p>
+              </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label fw-semibold">Full Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  className="form-control form-control-premium"
-                  placeholder="Jane Doe"
-                  value={name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label fw-semibold">Email Address</label>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control form-control-premium"
-                  placeholder="jane@example.com"
-                  value={email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label fw-semibold">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  className="form-control form-control-premium"
-                  placeholder="Minimum 6 characters"
-                  value={password}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="form-label fw-semibold">Profile Picture (Optional)</label>
-                <input
-                  type="file"
-                  className="form-control form-control-premium"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </div>
+            <div className="p-4 bg-white">
+              <form onSubmit={handleSubmit}>
+                <div className="form-floating-auth">
+                  <input type="text" name="name" value={name} onChange={handleChange} required placeholder=" " />
+                  <label>Full Name</label>
+                </div>
 
-              <button type="submit" className="btn btn-premium-primary w-100 py-2 mb-3" disabled={loading}>
-                {loading ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Creating Account...
-                  </>
-                ) : (
-                  'Register'
-                )}
-              </button>
-            </form>
+                <div className="form-floating-auth">
+                  <input type="email" name="email" value={email} onChange={handleChange} required placeholder=" " />
+                  <label>Email Address</label>
+                </div>
 
-            <div className="text-center mt-3">
-              <span className="text-muted">Already have an account? </span>
-              <Link to="/login" className="fw-bold text-primary text-decoration-none">Login Here</Link>
+                <div className="form-floating-auth" style={{ position: 'relative' }}>
+                  <input type={showPassword ? 'text' : 'password'} name="password" value={password} onChange={handleChange} required placeholder=" " />
+                  <label>Password</label>
+                  <button type="button" className="password-toggle" onClick={() => setShowPassword(!showPassword)} aria-label="Toggle password visibility">
+                    {showPassword ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
+                  </button>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Profile Picture (Optional)</label>
+                  <input
+                    type="file"
+                    className="form-control form-control-premium"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </div>
+
+                <div className="form-check mb-3">
+                  <input className="form-check-input" type="checkbox" id="terms" />
+                  <label className="form-check-label" htmlFor="terms">I agree to the Terms and Privacy Policy</label>
+                </div>
+
+                <button type="submit" className="btn btn-premium-primary w-100 py-2 mb-3" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Creating Account...
+                    </>
+                  ) : (
+                    'Create Account'
+                  )}
+                </button>
+              </form>
+
+              <div className="text-center mt-3">
+                <span className="text-muted">Already have an account? </span>
+                <Link to="/login" className="fw-bold text-primary text-decoration-none">Login Here</Link>
+              </div>
             </div>
-
+            <div className="auth-foot">By creating an account you agree to our terms.</div>
           </div>
         </div>
       </div>
