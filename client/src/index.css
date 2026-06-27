@@ -1,0 +1,181 @@
+/* Custom Design System & Premium CSS Stylesheet for SmartBlog */
+
+:root {
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --secondary-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  --dark-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --body-font: 'Inter', sans-serif;
+  --heading-font: 'Outfit', sans-serif;
+  --transition-speed: 0.3s;
+}
+
+body {
+  font-family: var(--body-font);
+  color: #334155;
+  background-color: #f8fafc;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .display-font {
+  font-family: var(--heading-font);
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Glassmorphic Navbar */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all var(--transition-speed) ease;
+}
+
+/* Premium Buttons */
+.btn-premium-primary {
+  background: var(--primary-gradient);
+  color: #fff;
+  border: none;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+}
+.btn-premium-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
+  color: #fff;
+}
+
+.btn-premium-secondary {
+  background: var(--secondary-gradient);
+  color: #fff;
+  border: none;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
+}
+.btn-premium-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
+  color: #fff;
+}
+
+/* Hover Cards */
+.blog-card {
+  border: none;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+.blog-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+.blog-card .card-img-top {
+  transition: transform 0.5s ease;
+}
+.blog-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+/* Featured Hero Badge */
+.badge-tech {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 30px;
+  padding: 0.35rem 0.8rem;
+}
+
+/* Dynamic Gradient Text */
+.text-gradient {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Comment Box */
+.comment-bubble {
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+}
+
+/* Admin Sidebar Layout */
+.admin-sidebar {
+  background: var(--dark-gradient);
+  min-height: calc(100vh - 56px);
+  color: #94a3b8;
+}
+.admin-sidebar .nav-link {
+  color: #cbd5e1;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  margin: 0.2rem 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.admin-sidebar .nav-link:hover, .admin-sidebar .nav-link.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Skeleton Loading Animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* Toast Notifications Container */
+.toast-container-custom {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1060;
+}
+.toast-custom {
+  background: #0f172a;
+  color: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  animation: slideIn 0.3s forwards;
+}
+@keyframes slideIn {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Form inputs styling */
+.form-control-premium {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  transition: all 0.2s ease;
+}
+.form-control-premium:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  outline: none;
+}
