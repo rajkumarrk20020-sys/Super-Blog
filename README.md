@@ -1,6 +1,6 @@
 # SmartBlog – Advanced Blog Management System
 
-SmartBlog is a full-featured, production-ready Blog Management System developed as an MCA Major Project. It features a complete MVC backend structure, secure token-based user authentication, role-based controls (Visitor, Author, Admin), and a premium responsive frontend user interface built with React, Vite, and Bootstrap 5.
+A premium full-stack MERN blogging platform with authentication, author profiles, categories, search, and responsive editorial UI.
 
 ---
 
