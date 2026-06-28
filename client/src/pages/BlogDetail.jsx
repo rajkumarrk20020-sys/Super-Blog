@@ -21,6 +21,17 @@ const BlogDetail = () => {
         const res = await api.get(`/blogs/${slug}`);
         if (res.data.success) {
           const fetchedBlog = res.data.data;
+
+          if (import.meta.env.DEV) {
+            console.groupCollapsed('BlogDetail image debug');
+            console.log('Fetched blog slug:', fetchedBlog.slug || slug);
+            console.log('  featuredImage:', fetchedBlog.featuredImage);
+            console.log('  featuredImage URL:', getImageUrl(fetchedBlog.featuredImage));
+            console.log('  author.profileImage:', fetchedBlog.author?.profileImage);
+            console.log('  author.profileImage URL:', getImageUrl(fetchedBlog.author?.profileImage));
+            console.groupEnd();
+          }
+
           setBlog(fetchedBlog);
           
           // Dynamic SEO Injection

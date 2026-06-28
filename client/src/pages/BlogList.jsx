@@ -65,6 +65,19 @@ const BlogList = () => {
       if (res.data.success) {
         setBlogs(res.data.data);
         setPagination(res.data.pagination);
+
+        if (import.meta.env.DEV) {
+          console.groupCollapsed('BlogList image debug');
+          console.log('Fetched blogs count:', res.data.data.length);
+          res.data.data.forEach((item, index) => {
+            console.log(`blog[${index}] slug:`, item.slug);
+            console.log('  featuredImage:', item.featuredImage);
+            console.log('  featuredImage URL:', getImageUrl(item.featuredImage));
+            console.log('  author.profileImage:', item.author?.profileImage);
+            console.log('  author.profileImage URL:', getImageUrl(item.author?.profileImage));
+          });
+          console.groupEnd();
+        }
       }
     } catch (err) {
       console.error(err);
