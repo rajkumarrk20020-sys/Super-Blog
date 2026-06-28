@@ -1,11 +1,14 @@
 const RAW_API_URL = import.meta.env.DEV
   ? 'http://localhost:5000'
-  : import.meta.env.VITE_API_URL;
+  : (import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.__SMARTBLOG_API_URL__) || null);
 
-const BASE_IMAGE_URL = RAW_API_URL?.replace(/\/api\/?$/, '');
+const BASE_IMAGE_URL = RAW_API_URL ? RAW_API_URL.replace(/\/api\/?$/, '') : (typeof window !== 'undefined' ? window.location.origin : '');
 
 if (!import.meta.env.DEV && !RAW_API_URL) {
-  throw new Error('Missing VITE_API_URL. Set VITE_API_URL in your production environment.');
+  // Don't throw during runtime; instead warn and fall back to current origin.
+  // Note: For correct production behavior, set VITE_API_URL at build time to your backend origin.
+  // eslint-disable-next-line no-console
+  console.warn('getImageUrl: VITE_API_URL not set at build time. Using', BASE_IMAGE_URL);
 }
 
 const getImageUrl = (image) => {
@@ -32,7 +35,6 @@ const getImageUrl = (image) => {
     finalUrl = `${BASE_IMAGE_URL}/${imagePath}`;
   }
 
-  console.log({ RAW_API_URL, BASE_IMAGE_URL, image, finalUrl });
   return finalUrl;
 };
 
