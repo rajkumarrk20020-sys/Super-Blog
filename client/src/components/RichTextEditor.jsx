@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import getImageUrl from '../utils/getImageUrl';
 
 const RichTextEditor = ({ value, onChange, placeholder }) => {
   const [isPreview, setIsPreview] = useState(false);
@@ -121,7 +122,23 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
           <div
             className="p-4 bg-white overflow-auto blog-preview-pane"
             style={{ minHeight: '300px', maxHeight: '500px' }}
-            dangerouslySetInnerHTML={{ __html: value || '<p className="text-muted">No content to preview yet.</p>' }}
+            dangerouslySetInnerHTML={{ __html: (() => {
+              const html = value || '<p className="text-muted">No content to preview yet.</p>';
+              try {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const imgs = doc.querySelectorAll('img');
+                imgs.forEach((img) => {
+                  const src = img.getAttribute('src') || '';
+                  const newSrc = getImageUrl(src);
+                  if (newSrc) img.setAttribute('src', newSrc);
+                });
+                return doc.body.innerHTML;
+              } catch (err) {
+                console.error('RichTextEditor preview processing error', err);
+                return html;
+              }
+            })() }}
           ></div>
         ) : (
           <textarea

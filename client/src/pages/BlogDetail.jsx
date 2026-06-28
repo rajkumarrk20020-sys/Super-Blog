@@ -7,6 +7,7 @@ import getImageUrl from '../utils/getImageUrl';
 const BlogDetail = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
+  const [contentHtml, setContentHtml] = useState('');
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,7 +33,28 @@ const BlogDetail = () => {
             console.groupEnd();
           }
 
+          // Normalize image URLs inside the blog HTML content so any
+          // <img src="/uploads/..."> becomes absolute via getImageUrl()
+          const processHtmlContent = (html) => {
+            if (!html) return '';
+            try {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, 'text/html');
+              const imgs = doc.querySelectorAll('img');
+              imgs.forEach((img) => {
+                const src = img.getAttribute('src') || '';
+                const newSrc = getImageUrl(src);
+                if (newSrc) img.setAttribute('src', newSrc);
+              });
+              return doc.body.innerHTML;
+            } catch (err) {
+              console.error('processHtmlContent error', err);
+              return html;
+            }
+          };
+
           setBlog(fetchedBlog);
+          setContentHtml(processHtmlContent(fetchedBlog.content || ''));
           
           // Dynamic SEO Injection
           document.title = fetchedBlog.metaTitle || fetchedBlog.title;
@@ -159,7 +181,7 @@ const BlogDetail = () => {
             <div className="col-lg-8">
               <article className="article-body bg-white rounded-4 shadow-sm p-5 mb-5">
                 <div className="content-body blog-post-body">
-                  <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+                  <div dangerouslySetInnerHTML={{ __html: contentHtml || blog.content || '' }}></div>
                 </div>
 
                 {blog.tags && blog.tags.length > 0 && (
